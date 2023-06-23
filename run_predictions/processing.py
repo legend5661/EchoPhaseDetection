@@ -55,7 +55,7 @@ class Predict():
                 chunked_sequence.append(new)
         return chunked_sequence
     
-    def get_predictions(predictions):
+    def get_predictions(self,predictions):
         # invert predictions to find_peaks ES frames
         inverted = predictions * -1
     

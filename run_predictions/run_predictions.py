@@ -24,23 +24,31 @@ tf.config.list_logical_devices()
 ''' Generate multibeat predictions for videos of arbitrary length '''
 
 # Load filenames from csv or directory, or type one filename
-filenames = 
+# 从csv文件中获取文件名信息
+df1 = pd.read_csv('//staff//wangtiantong//phase_detection//dataset//EchoNet-Dynamic//FileList.csv')
+
+filenames =  df1.iloc[:, 0].tolist()
+
 
 # Load saved model
-SAVED_MODEL = load_model("")
+SAVED_MODEL = load_model("//staff//wangtiantong//phase_detection//weight//echoWeights.hdf5")
+
+
 
 SEQUENCE_LENGTH = 30
 STRIDE = 1
 
 final_predictions = []
-
+list_len = []
 for file in tqdm(filenames):
 
-    file_path = f"{file}.avi" # Complete path to video files
+    file_path = f"//staff//wangtiantong//phase_detection//dataset//EchoNet-Dynamic//Videos//{file}.avi" # Complete path to video files
     
     predict = Predict(file_path, SEQUENCE_LENGTH, STRIDE) # Data management class object
     
     frames = predict.get_frames()
+
+    list_len.append(len(frames))    #用于测试是否帧数正常
     
     image_sequence = predict.get_image_sequence(frames)
     
@@ -85,3 +93,4 @@ df.to_csv("multibeat_phase_detection.csv", index=False)
 # Quit GPU session
 session.close()
 
+print(list_len)
