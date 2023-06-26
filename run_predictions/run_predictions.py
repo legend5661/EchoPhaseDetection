@@ -5,6 +5,17 @@ from tqdm import tqdm
 from keras.models import load_model
 import keras.backend.tensorflow_backend as tfback
 import tensorflow as tf
+import os
+
+# # 设置 GPU 可见性
+# os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+
+# # 设置 GPU 内存动态分配
+# gpus = tf.config.experimental.list_physical_devices('GPU')
+# for gpu in gpus:
+#     tf.config.experimental.set_memory_growth(gpu, True)
+
+# print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
 
 # Initialise GPU session
 gpu_options = tf.compat.v1.GPUOptions(allow_growth=True)
@@ -15,6 +26,7 @@ def _get_available_gpus():
         devices = tf.config.list_logical_devices()
         tfback._LOCAL_DEVICES = [x.name for x in devices]
     return [x for x in tfback._LOCAL_DEVICES if 'device:gpu' in x.lower()]
+
 
 tfback._get_available_gpus = _get_available_gpus
 tfback._get_available_gpus
@@ -48,7 +60,7 @@ for file in tqdm(filenames):
     
     frames = predict.get_frames()
 
-    list_len.append(len(frames))    #用于测试是否帧数正常
+    list_len.append(len(frames))    #用于测试是否帧数正常，我自己加的
     
     image_sequence = predict.get_image_sequence(frames)
     
